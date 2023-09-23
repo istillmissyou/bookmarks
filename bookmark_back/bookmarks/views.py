@@ -45,12 +45,12 @@ class BookmarkViewSet(viewsets.ModelViewSet):
     def create(self, request):
         """ Создать закладку. """
         serializer = CreateBookmarkSerializer(data=request.data)
-        
+
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         user = request.user
         url = serializer.validated_data['url']
-        
+
         bookmark = Bookmark.objects.filter(url=url, user=user).first()
         if bookmark:
             return Response({'error': False, 'message': 'OK', 'payload': BookmarkSerializer(bookmark).data}, status=status.HTTP_200_OK)
